@@ -8,29 +8,29 @@
         class="absolute w-full h-full z-[-1] md:object-cover"
       />
     </picture>
-    <div class="md:flex md:flex-row-reverse md:justify-center max-w[1536px] mx-auto md:min-h-[600px]">
-      <div class="flex flex-col md:basis-2/4 md:items-stretch md:overflow-hidden">
-        <img src="/images/homepage-hero-headphones.webp" alt="Headphones" class="h-full object-cover object-left" />
-      </div>
+    <div class="md:flex md:flex-row-reverse md:justify-center mt-max-w-[1540px] mt-10 mx-auto md:min-h-[600px]">
       <div class="p-4 md:p-10 md:max-w-[768px] md:flex md:flex-col md:justify-center md:items-start md:basis-2/4">
-        <p class="typography-text-xs md:typography-text-sm font-bold tracking-widest text-neutral-500 uppercase">
-          Feel the music
+        <p class="typography-text-xs md:typography-text-sm font-bold tracking-widest text-secondary-200 uppercase">
+          Design
         </p>
-        <h1 class="typography-display-2 md:typography-display-1 md:leading-[67.5px] font-bold mt-2 mb-4">
-          New Wireless Pro
+        <h1 class="typography-display-2 text-secondary-300 text-2xl md:typography-display-1 md:leading-[67.5px] font-bold mt-2 mb-4">
+          Kosmetikspiegel
         </h1>
         <p class="typography-text-base md:typography-text-lg">
-          Spatial audio. Adjustable ear cups. On-device controls. All-day battery.
+          Exklusive Designs für deine persönliche Beauty-Oase
         </p>
         <div class="flex flex-col md:flex-row gap-4 mt-6">
           <SfButton size="lg"> Order now </SfButton>
           <SfButton size="lg" variant="secondary" class="bg-white"> Show more </SfButton>
         </div>
       </div>
+      <div class="flex flex-col md:basis-2/4 md:items-stretch md:overflow-hidden">
+        <img src="https://cdn02.plentymarkets.com/4tnz2nlw17zy/frontend/RedesignStartseite/Gruppe_maskieren_64.png" alt="Headphones" class="h-full object-cover object-left" />
+      </div>
     </div>
   </div>
   <div class="max-w-screen-3xl mx-auto md:px-6 lg:px-10">
-    <div class="flex flex-wrap gap-4 lg:gap-6 lg:flex-no-wrap justify-center my-10">
+    <div class="flex flex-wrap gap-4 lg:gap-6 lg:flex-no-wrap justify-center my-24">
       <div
         v-for="{ title, image } in categories"
         :key="title"
@@ -130,14 +130,14 @@ onMounted(async () => {
 
 const displayDetails = [
   {
-    image: '/images/homepage-display-1.webp',
-    title: 'Sunny Days Ahead',
+    image: 'https://cdn02.plentymarkets.com/4tnz2nlw17zy/frontend/RedesignStartseite/Gruppe_maskieren_59.png',
+    title: 'Kosmetikspiegel mit LED',
     subtitle: 'Be inspired',
     description: 'Step out in style with our sunglasses collection',
     buttonText: 'Discover now',
     reverse: false,
-    backgroundColor: 'bg-negative-200',
-    titleClass: 'md:typography-display-2',
+    backgroundColor: 'bg-secondary-200',
+    titleClass: 'md:typography-display-2 md:text-3xl',
     subtitleClass: 'md:typography-headline-6',
     descriptionClass: 'md:typography-text-lg',
   },
@@ -163,16 +163,16 @@ const displayDetails = [
 
 const categories = [
   {
-    title: `Women`,
-    image: '/images/homepage-women-category.webp',
+    title: `Handspiegel`,
+    image: 'https://cdn02.plentymarkets.com/4tnz2nlw17zy/frontend/RedesignStartseite/Gruppe_maskieren_65.png',
   },
   {
-    title: `Men`,
-    image: '/images/homepage-men-category.webp',
+    title: `Stand-Kosmetikspiegel`,
+    image: 'https://cdn02.plentymarkets.com/4tnz2nlw17zy/frontend/RedesignStartseite/Gruppe_maskieren_65.png',
   },
   {
-    title: `Kid`,
-    image: '/images/homepage-kid-category.webp',
+    title: `Wand-Kosmetikspiegel`,
+    image: 'https://cdn02.plentymarkets.com/4tnz2nlw17zy/frontend/RedesignStartseite/Gruppe_maskieren_65.png',
   },
 ];
 </script>
