@@ -135,7 +135,7 @@ watch(
 const displayDetails = [
   {
     image: '/images/homepage-display-1.webp',
-    title: 'Sunny Days Ahead',
+    title: 'Rainy Days Ahead',
     subtitle: 'Be inspired',
     description: 'Step out in style with our sunglasses collection',
     buttonText: 'Discover now',
