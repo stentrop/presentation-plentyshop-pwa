@@ -4,20 +4,34 @@
     data-testid="product-card"
   >
     <div class="relative">
-      <SfLink :tag="NuxtLink" rel="preload" :to="localePath(`${path}/${productSlug}`)" as="image">
+      <UiBadges
+        :class="['absolute', isFromWishlist ? 'mx-2' : 'm-2']"
+        :product="product"
+        :use-availability="isFromWishlist"
+      />
+
+      <SfLink
+        :tag="NuxtLink"
+        rel="preload"
+        :to="localePath(`${path}/${productSlug}`)"
+        as="image"
+        class="flex items-center justify-center"
+      >
         <NuxtImg
-          :src="imageUrl"
+          ref="img"
+          :src="addModernImageExtension(imageUrl)"
           :alt="imageAlt"
-          class="object-contain rounded-md aspect-square w-full h-full"
-          data-testid="image-slot"
-          width="190"
-          height="190"
           :loading="lazy && !priority ? 'lazy' : 'eager'"
           :fetchpriority="priority ? 'high' : undefined"
           :preload="priority || false"
-          format="webp"
+          class="object-contain rounded-md aspect-square w-full h-fit"
+          data-testid="image-slot"
+          width="190"
+          height="190"
         />
+        <SfLoaderCircular v-if="!imageLoaded" class="absolute" size="sm" />
       </SfLink>
+
       <slot name="wishlistButton">
         <WishlistButton
           square
@@ -36,6 +50,7 @@
           <SfCounter size="xs">{{ ratingCount }}</SfCounter>
         </SfLink>
       </div>
+
       <p class="block py-2 font-normal typography-text-xs text-neutral-700 text-justify">
         {{ description }}
       </p>
@@ -45,17 +60,17 @@
       </div>
       <div class="flex items-center mt-auto">
         <span class="block pb-2 font-bold typography-text-sm" data-testid="product-card-vertical-price">
-          <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product)" class="mr-1"
-            >{{ i18n.t('account.ordersAndReturns.orderDetails.priceFrom') }}
+          <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product)" class="mr-1">
+            {{ t('account.ordersAndReturns.orderDetails.priceFrom') }}
           </span>
-          <span>{{ i18n.n(cheapestPrice ?? mainPrice, 'currency') }}</span>
-          <span v-if="showNetPrices">{{ i18n.t('asterisk') }} </span>
+          <span>{{ n(cheapestPrice ?? mainPrice, 'currency') }}</span>
+          <span v-if="showNetPrices">{{ t('asterisk') }} </span>
         </span>
         <span
           v-if="oldPrice && oldPrice !== mainPrice"
           class="typography-text-sm text-neutral-500 line-through ml-3 pb-2"
         >
-          {{ i18n.n(oldPrice, 'currency') }}
+          {{ n(oldPrice, 'currency') }}
         </span>
       </div>
       <SfButton
@@ -71,11 +86,11 @@
         </template>
         <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="sm" />
         <span v-else>
-          {{ i18n.t('addToCartShort') }}
+          {{ t('addToCartShort') }}
         </span>
       </SfButton>
       <SfButton v-else type="button" :tag="NuxtLink" :to="localePath(`${path}/${productSlug}`)" size="sm" class="w-fit">
-        <span>{{ i18n.t('showArticle') }}</span>
+        <span>{{ t('showArticle') }}</span>
         <template #prefix>
           <SfIconChevronRight size="sm" />
         </template>
@@ -98,7 +113,8 @@ import {
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';
 
 const localePath = useLocalePath();
-const i18n = useI18n();
+const { addModernImageExtension } = useModernImage();
+const { t, n } = useI18n();
 const { product } = withDefaults(defineProps<ProductCardProps>(), {
   lazy: true,
   imageAlt: '',
@@ -109,11 +125,27 @@ const { data: categoryTree } = useCategoryTree();
 
 const { addToCart } = useCart();
 const { send } = useNotification();
-const { t } = useI18n();
 const loading = ref(false);
-
+const imageLoaded = ref(false);
+const img = ref();
+const emit = defineEmits(['load']);
 const runtimeConfig = useRuntimeConfig();
 const showNetPrices = runtimeConfig.public.showNetPrices;
+
+onMounted(() => {
+  const imgElement = (img.value?.$el as HTMLImageElement) || null;
+
+  if (imgElement) {
+    if (!imageLoaded.value) {
+      if (imgElement.complete) imageLoaded.value = true;
+      imgElement.addEventListener('load', () => (imageLoaded.value = true));
+    }
+
+    nextTick(() => {
+      if (!imgElement.complete) emit('load');
+    });
+  }
+});
 
 const addWithLoader = async (productId: number) => {
   loading.value = true;
@@ -128,6 +160,7 @@ const addWithLoader = async (productId: number) => {
     loading.value = false;
   }
 };
+
 const mainPrice = computed(() => {
   const price = productGetters.getPrice(product);
   if (!price) return 0;
@@ -142,6 +175,5 @@ const cheapestPrice = productGetters.getCheapestGraduatedPrice(product);
 const oldPrice = productGetters.getRegularPrice(product);
 const path = computed(() => productGetters.getCategoryUrlPath(product, categoryTree.value));
 const productSlug = computed(() => productGetters.getSlug(product) + `_${productGetters.getItemId(product)}`);
-
 const NuxtLink = resolveComponent('NuxtLink');
 </script>
